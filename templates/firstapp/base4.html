@@ -48,8 +48,8 @@
 
       <!-- Theme styles START -->
       <link href="{% static "assets/pages/css/components.css" %}" rel="stylesheet">
-      <link href=" {% static "assets/pages/css/slider.css" %}" rel="stylesheet">
       <link href="{% static "assets/pages/css/portfolio.css" %}" rel="stylesheet">
+      <link href=" {% static "assets/pages/css/slider.css" %}" rel="stylesheet">
       <link href="{% static "assets/corporate/css/style.css" %}" rel="stylesheet">
       <link href="{% static "assets/corporate/css/style-responsive.css" %}" rel="stylesheet">
       <link href="{% static "assets/corporate/css/themes/blue.css" %}" rel="stylesheet" id="style-color">
@@ -165,21 +165,20 @@
 
 
 
-
-
-            <li><a href="{% url 'admin:index' %}" target="_blank">Admin's Section</a></li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="javascript:;">
-                User Section
+                Settings
 
               </a>
               <ul class="dropdown-menu">
-                <li><a href="{% url 'profile' %}">View Profile</a></li>
-                <li><a href="page-services.html">Sell Item</a></li>
-                <li><a href="page-faq.html">Purchase History</a></li>
-                <li><a href="page-gallery.html">Chat History</a></li>
+
+                <li><a href="page-services.html">Update Profile</a></li>
+                <li><a href="page-faq.html">Deactivate Profile</a></li>
+
               </ul>
             </li>
+
+
 
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="javascript:;">
