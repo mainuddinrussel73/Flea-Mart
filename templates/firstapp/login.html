@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends "firstapp/base.html" %}
+{% extends "firstapp/base3.html" %}
 
 
   {% block body_block %}
@@ -32,17 +32,20 @@
             <div class="content-form-page">
               <div class="row">
                 <div class="col-md-7 col-sm-7">
-                  <form class="form-horizontal form-without-legend" role="form">
+
+
+            <form class="form-horizontal form-without-legend" role="form" method="post" action="{% url 'firstapp:login' %}">
+              {% csrf_token %}
                     <div class="form-group">
-                      <label for="email" class="col-lg-4 control-label">Email <span class="require">*</span></label>
+                      <label for="email" class="col-lg-4 control-label">User Name <span class="require">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control" placeholder="username" id="email">
+                        <input id="username" type="text" class="form-control" placeholder="username" name="username" />
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="password" class="col-lg-4 control-label">Password <span class="require">*</span></label>
                       <div class="col-lg-8">
-                        <input type="password" class="form-control" placeholder="password"id="password">
+                        <input id="password" type="password" class="form-control" placeholder="password" name="password" />
                       </div>
                     </div>
                     <div class="row">
@@ -51,8 +54,13 @@
                       </div>
                     </div>
                     <div class="row">
+                      <div class="col-lg-8 col-md-offset-4 padding-left-0">
+                        <a href="page-forgotton-password.html">{{ Notice }}</a>
+                      </div>
+                    </div>
+                    <div class="row">
                       <div class="col-lg-8 col-md-offset-4 padding-left-0 padding-top-20">
-                        <button type="submit" class="btn btn-success">Login</button>
+                        <button type="submit" class="btn btn-success" value="Login">Login</button>
                       </div>
                     </div>
                     <div class="row">
@@ -69,7 +77,14 @@
                         </div>
                       </div>
                     </div>
+                    <div class="row">
+                      <div class="col-lg-8 col-md-offset-4 padding-left-0 padding-top-20">
+                        <input type="hidden" name="next" value="/home/" />
+                      </div>
+                    </div>
                   </form>
+
+
                 </div>
                 <div class="col-md-4 col-sm-4 pull-right">
                   <div class="form-info">
@@ -81,6 +96,19 @@
                 </div>
               </div>
             </div>
+
+
+              </div>
+              <div class="col-md-4 col-sm-4 pull-right">
+                <div class="form-info">
+                  <h2><em>Important</em> Information</h2>
+                  <p>If you find any kind of system fault please inform us at <kbd>fleamart@gmail.com</kbd>.</p>
+
+                  <button type="button" class="btn btn-primary">More details</button>
+                </div>
+              </div>
+            </div>
+          </div>
           </div>
           <!-- END CONTENT -->
         </div>

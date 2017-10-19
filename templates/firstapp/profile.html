@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% extends "firstapp/base4.html" %}
+{% load static from staticfiles %}
+
+  {% block body_block %}
+
+        <ul class="breadcrumb">
+
+            <li><a href="{% url 'home' %}">User Home</a></li>
+            <li class="active">User Profile</li>
+        </ul>
+
+
+
+
+
+        <div class="row margin-bottom-40">
+  <!-- BEGIN SIDEBAR -->
+  <div class="sidebar col-md-3 col-sm-3">
+    <ul class="list-group margin-bottom-25 sidebar-menu">
+        <h1>Profile</h1>
+      {% if user.userprofileinfo.profilepic %}
+        <img src="{{ user.userprofileinfo.profilepic.url }}" width="240">
+      {% endif %}
+      <li class="list-group-item clearfix"><a href="#"><i class="fa fa-angle-right"></i>  <p>Username: {{ user }}</p> </a></li>
+      <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> <p>Email: {{ user.email }}</p> </a></li>
+      <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> <p>Address: {{ user.userprofileinfo.address }}</p> </a></li>
+      <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> <p>Website: {{ user.userprofileinfo.portfolio }}</p> </a></li>
+
+    </ul>
+  </div>
+  <!-- END SIDEBAR -->
+
+  <!-- BEGIN CONTENT -->
+  <div class="col-md-9 col-sm-9">
+
+    <div class="content-form-page">
+      <div class="row">
+        <div class="col-md-7 col-sm-7">
+
+
+
+
+
+
+      </div>
+      <div class="col-md-4 col-sm-4 pull-right">
+        <div class="form-info">
+          <h2><em>Important</em> Information</h2>
+          <p>If you find any kind of system fault please inform us at <kbd>fleamart@gmail.com</kbd>.</p>
+
+          <button type="button" class="btn btn-primary">More details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- END CONTENT -->
+</div>
+{% endblock %}
