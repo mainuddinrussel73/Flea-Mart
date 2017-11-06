@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'firstapp',
-    'widget_tweaks'
+    'widget_tweaks',
+    'User'
 ]
 
 MIDDLEWARE = [
@@ -141,4 +142,4 @@ MEDIA_URL = '/media/'
 LOGIN_URL = '/firstapp/login'
 
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/User/home/'

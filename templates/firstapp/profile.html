@@ -6,7 +6,7 @@
 
         <ul class="breadcrumb">
 
-            <li><a href="{% url 'home' %}">User Home</a></li>
+            <li><a href="{% url 'User:home' %}">{{ user }} Home</a></li>
             <li class="active">User Profile</li>
         </ul>
 
@@ -22,29 +22,43 @@
       {% if user.userprofileinfo.profilepic %}
         <img src="{{ user.userprofileinfo.profilepic.url }}" width="240">
       {% endif %}
+    <br>
+    <br>
       <li class="list-group-item clearfix"><a href="#"><i class="fa fa-angle-right"></i>  <p>Username: {{ user }}</p> </a></li>
       <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> <p>Email: {{ user.email }}</p> </a></li>
       <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> <p>Address: {{ user.userprofileinfo.address }}</p> </a></li>
       <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> <p>Website: {{ user.userprofileinfo.portfolio }}</p> </a></li>
 
     </ul>
+
   </div>
   <!-- END SIDEBAR -->
 
   <!-- BEGIN CONTENT -->
-  <div class="col-md-9 col-sm-9">
+  <div class="col-md-6 col-sm-6">
+      <h2>Recent Uploaded Products</h2>
+      <div class="content-page">
+          <div class="filter-v1">
+            {% for item in items %}
+            <div class="row mix-grid thumbnails">
+                <div class="col-md-6 col-sm-8 mix category_1 mix_all" style="display: block; opacity: 1; ">
+                  <div class="mix-inner">
+                    <img alt="" src="{{ item.item_pic.url }}" class="img-responsive">
 
-    <div class="content-form-page">
-      <div class="row">
-        <div class="col-md-7 col-sm-7">
-
-
-
-
-
-
+                    <div class="mix-details">
+                       <h4>{{ item.item_name }}</h4>
+                       <a class="mix-link"><i class="">{{ item.item_usetime }}</i></a>
+                       <a title="{{ item.item_location }}" href="{{ item.item_pic.url }}" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            {% endfor %}
+          </div>
       </div>
-      <div class="col-md-4 col-sm-4 pull-right">
+  </div>
+
+  <div class="col-md-3 col-sm-3 pull-right">
         <div class="form-info">
           <h2><em>Important</em> Information</h2>
           <p>If you find any kind of system fault please inform us at <kbd>fleamart@gmail.com</kbd>.</p>
@@ -52,9 +66,7 @@
           <button type="button" class="btn btn-primary">More details</button>
         </div>
       </div>
-    </div>
-  </div>
   </div>
   <!-- END CONTENT -->
-</div>
+
 {% endblock %}

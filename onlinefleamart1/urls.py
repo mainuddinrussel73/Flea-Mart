@@ -12,12 +12,14 @@ from django.conf.urls import handler404,handler500
 urlpatterns = [
     url(r'^$',views.index,name='index'),
     url(r'^fleamart/',include('firstapp.urls')),
+    url(r'^User/',include('User.urls',namespace="User")),
+
     # url(r'^$',include('firstapp.urls')),
-    url(r'^home/$',views.userhome,name='home'),
+
     url(r'^admin/', admin.site.urls),
     url(r'^logout/$',views.userlogout,name='logout'),
 
-    url(r'^profile/$',views.userprofile,name='profile'),
+
 
     # url(r'^login/', views.login,name='login'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -13,7 +13,7 @@ urlpatterns=[
         url(r'^error_404/$',views.error_404,name='error_404'),
         url(r'^error_500/$',views.error_500,name='error_500'),
 
-
+        
 
 
 
