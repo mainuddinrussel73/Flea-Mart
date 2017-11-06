@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from firstapp.forms import UserForm,UserProfileInform
 
 from .models import UserProfileInfo,User
@@ -73,8 +73,7 @@ def userlogin(request):
         if user:
             if user.is_active:
                 auth_login( request , user )
-                url = '/home'
-                return HttpResponseRedirect(url)
+                return redirect('/User/home/')
             else:
                 return HttpResponse("Account is not active")
         else:
@@ -85,16 +84,3 @@ def userlogin(request):
             return render(request,'firstapp/login.html',context)
     else:
         return render(request,'firstapp/login.html')
-
-@login_required
-def userhome(request):
-    return render(request,'firstapp/userhome.html')
-
-@login_required
-def userprofile(request, pk=None):
-    if pk:
-        user = User.objects.get(pk=pk)
-    else:
-        user = request.user
-    args = {'user': user}
-    return render(request, 'firstapp/profile.html', args)

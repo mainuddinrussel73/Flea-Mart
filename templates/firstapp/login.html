@@ -34,7 +34,7 @@
                 <div class="col-md-7 col-sm-7">
 
 
-            <form class="form-horizontal form-without-legend" role="form" method="post" action="{% url 'firstapp:login' %}">
+            <form class="form-horizontal form-without-legend" role="form" method="post" action="{% url 'firstapp:login'   %}">
               {% csrf_token %}
                     <div class="form-group">
                       <label for="email" class="col-lg-4 control-label">User Name <span class="require">*</span></label>
@@ -99,14 +99,7 @@
 
 
               </div>
-              <div class="col-md-4 col-sm-4 pull-right">
-                <div class="form-info">
-                  <h2><em>Important</em> Information</h2>
-                  <p>If you find any kind of system fault please inform us at <kbd>fleamart@gmail.com</kbd>.</p>
-
-                  <button type="button" class="btn btn-primary">More details</button>
-                </div>
-              </div>
+            
             </div>
           </div>
           </div>
