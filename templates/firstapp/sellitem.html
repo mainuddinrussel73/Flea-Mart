@@ -8,8 +8,8 @@
         <ul class="breadcrumb">
 
 
-            <li>{{ user }} Home</li>
-            <li class="active"><a href="#"> Sell An Item</a></li>
+            <li><a href="{% url 'User:home' %}">{{ user }} Home</a></li>
+            <li class="active"><a href=""> Sell An Item</a></li>
         </ul>
 
         {% if isposted %}
