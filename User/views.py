@@ -14,8 +14,9 @@ from User.models import SellItemInfo
 @login_required
 def userhome(request,username='main'):
     u = User.objects.get(username=request.user.username)
-
-    return render(request,'firstapp/userhome.html',{})
+    items = SellItemInfo.objects.all()
+    args = {'items' : items}
+    return render(request,'firstapp/userhome.html',args)
 
 @login_required
 def userprofile(request,username='main',pk=None):
@@ -29,7 +30,6 @@ def userprofile(request,username='main',pk=None):
         username = user.username
 
     items = SellItemInfo.objects.filter(uploader=user)
-    print(items)
     args = {'user': user,'items' : items}
     return render(request, 'firstapp/profile.html', args,)
 

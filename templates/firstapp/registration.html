@@ -5,9 +5,8 @@
 
   {% block body_block %}
   <ul class="breadcrumb">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="javascript:;">Pages</a></li>
-      <li class="active">Create new account</li>
+        <li><a href="{% url 'index' %}">Home</a></li>
+      <li class="active"><a href="">Create new account</a></li>
   </ul>
 
       {% if registered %}

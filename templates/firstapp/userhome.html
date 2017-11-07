@@ -7,123 +7,114 @@
         <ul class="breadcrumb">
 
 
-            <li class="active">{{ user }} Home</li>
+              <li class="active"><a href="">{{ user }} Home</a></li>
         </ul>
         <!-- BEGIN SIDEBAR & CONTENT -->
         <div class="row margin-bottom-40">
          <div class="col-md-12 col-sm-12">
             <h1>All Items</h1>
             <div class="content-page">
+
                 <div class="filter-v1">
+                  <style media="screen">
+
+
+                            .row {
+                              margin: 8px -16px;
+                            }
+
+                            /* Add padding BETWEEN each column (if you want) */
+                            .row,
+                            .row > .column {
+                              padding: 8px;
+                            }
+
+                            /* Create three equal columns that floats next to each other */
+                            .column {
+                              float: left;
+                              width: 33.33%;
+                              /*display: block; opacity: 1;*/
+                              display: none; /* Hide columns by default */
+                            }
+
+                            /* Clear floats after rows */
+                            .row:after {
+                              content: "";
+                              display: table;
+                              clear: both;
+                            }
+
+                            /* Content */
+                            .content {
+                              background-color: white;
+                              padding: 10px;
+                            }
+
+                            /* The "show" class is added to the filtered elements */
+                            .show {
+                              display: block;
+                            }
+                  </style>
+                  <script type="text/javascript">
+                      filterSelection("all") // Execute the function and show all columns
+                      function filterSelection(c) {
+                      var x, i;
+                      x = document.getElementsByClassName("column");
+                      if (c == "all") c = "";
+                      // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+                      for (i = 0; i < x.length; i++) {
+                        w3RemoveClass(x[i], "show");
+                        if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+                      }
+                      }
+
+                      // Show filtered elements
+                      function w3AddClass(element, name) {
+                      var i, arr1, arr2;
+                      arr1 = element.className.split(" ");
+                      arr2 = name.split(" ");
+                      for (i = 0; i < arr2.length; i++) {
+                        if (arr1.indexOf(arr2[i]) == -1) {
+                          element.className += " " + arr2[i];
+                        }
+                      }
+                      }
+
+                      // Hide elements that are not selected
+                      function w3RemoveClass(element, name) {
+                      var i, arr1, arr2;
+                      arr1 = element.className.split(" ");
+                      arr2 = name.split(" ");
+                      for (i = 0; i < arr2.length; i++) {
+                        while (arr1.indexOf(arr2[i]) > -1) {
+                          arr1.splice(arr1.indexOf(arr2[i]), 1);
+                        }
+                      }
+                      element.className = arr1.join(" ");
+                    }
+                  </script>
                   <ul class="mix-filter">
-                    <li data-filter="all" class="filter active">All</li>
-                    <li data-filter="category_1" class="filter">Phones</li>
-                    <li data-filter="category_2" class="filter">Laptop</li>
-                    <li data-filter="category_3" class="filter">Camera</li>
-                    <li data-filter="category_3 category_1" class="filter">Software</li>
+                    <li <input type="" onclick="filterSelection('all')" name="category" checked> Show all</li>
+                    <li <input type="" onclick="filterSelection('phone')" name="category"> Plone </li>
+                    <li <input type="" onclick="filterSelection('tv')" name="category"> TV</li>
+                    <li <input type="" onclick="filterSelection('camera')" name="category"> Camera </li>
                   </ul>
-                              <div class="row mix-grid thumbnails">
-                                  <div class="col-md-3 col-sm-4 mix category_1 mix_all" style="display: block; opacity: 1; ">
-                                    <div class="mix-inner">
-                                       <img alt="" src="{% static "assets/pages/img/works/img1.jpg" %}" class="img-responsive">
-                                       <div class="mix-details">
-                                          <h4>Cascusamus et iusto odio</h4>
-                                          <a class="mix-link"><i class="fa fa-link"></i></a>
-                                          <a data-rel="fancybox-button" title="Project Name" href="{% static "assets/pages/img/works/img1.jpg" %}" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                       </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_2 mix_all" style="display: block; opacity: 1; ">
-                                       <div class="mix-inner">
-                                          <img alt="" src="assets/pages/img/works/img2.jpg" class="img-responsive">
-                                          <div class="mix-details">
-                                             <h4>Cascusamus et iusto accusamus</h4>
-                                             <a class="mix-link"><i class="fa fa-link"></i></a>
-                                             <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img2.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                          </div>
-                                       </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_3 mix_all" style="display: block; opacity: 1; ">
-                                       <div class="mix-inner">
-                                          <img alt="" src="assets/pages/img/works/img3.jpg" class="img-responsive">
-                                          <div class="mix-details">
-                                             <h4>Cascusamus et iusto accusamus</h4>
-                                             <a class="mix-link"><i class="fa fa-link"></i></a>
-                                             <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img3.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_1 category_2 mix_all" style="display: block; opacity: 1; ">
-                                       <div class="mix-inner">
-                                         <img alt="" src="assets/pages/img/works/img4.jpg" class="img-responsive">
-                                         <div class="mix-details">
-                                             <h4>Cascusamus et iusto accusamus</h4>
-                                             <a class="mix-link"><i class="fa fa-link"></i></a>
-                                             <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img4.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                         </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_2 category_1 mix_all" style="display: block; opacity: 1; ">
-                                    <div class="mix-inner">
-                                      <img alt="" src="assets/pages/img/works/img5.jpg" class="img-responsive">
-                                      <div class="mix-details">
-                                          <h4>Cascusamus et iusto accusamus</h4>
-                                          <a class="mix-link"><i class="fa fa-link"></i></a>
-                                          <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img5.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                      </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_1 category_2 mix_all" style="display: block; opacity: 1; ">
-                                    <div class="mix-inner">
-                                      <img alt="" src="assets/pages/img/works/img6.jpg" class="img-responsive">
-                                      <div class="mix-details">
-                                          <h4>Cascusamus et iusto accusamus</h4>
-                                          <a class="mix-link"><i class="fa fa-link"></i></a>
-                                          <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img6.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                      </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_2 category_3 mix_all" style="display: block; opacity: 1; ">
-                                    <div class="mix-inner">
-                                      <img alt="" src="assets/pages/img/works/img1.jpg" class="img-responsive">
-                                      <div class="mix-details">
-                                          <h4>Cascusamus et iusto accusamus</h4>
-                                          <a class="mix-link"><i class="fa fa-link"></i></a>
-                                          <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img1.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                      </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_1 category_2 mix_all" style="display: block; opacity: 1; ">
-                                    <div class="mix-inner">
-                                      <img alt="" src="assets/pages/img/works/img2.jpg" class="img-responsive">
-                                      <div class="mix-details">
-                                          <h4>Cascusamus et iusto accusamus</h4>
-                                          <a class="mix-link"><i class="fa fa-link"></i></a>
-                                          <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img2.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                      </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_3 mix_all" style="display: block; opacity: 1; ">
-                                    <div class="mix-inner">
-                                      <img alt="" src="assets/pages/img/works/img4.jpg" class="img-responsive">
-                                      <div class="mix-details">
-                                          <h4>Cascusamus et iusto accusamus</h4>
-                                          <a class="mix-link"><i class="fa fa-link"></i></a>
-                                          <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img4.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                      </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-md-3 col-sm-4 mix category_1 mix_all" style="display: block; opacity: 1; ">
-                                    <div class="mix-inner">
-                                      <img alt="" src="assets/pages/img/works/img3.jpg" class="img-responsive">
-                                      <div class="mix-details">
-                                          <h4>Cascusamus et iusto accusamus</h4>
-                                          <a class="mix-link"><i class="fa fa-link"></i></a>
-                                          <a data-rel="fancybox-button" title="Project Name" href="assets/pages/img/works/img3.jpg" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
-                                      </div>
-                                      </div>
-                                  </div>
-                              </div>
+                    <div class="row mix-grid thumbnails">
+                  {% for item in items %}
+                  <div class="column {{ item.item_type }}">
+                    <div class="col-md-9 col-sm-1 mix mix_all" style="display: block; opacity: 1; ">
+                        <div class="mix-inner">
+                      <img src="{{ item.item_pic.url }}" class="img-responsive" alt="Mountains">
+                      <div class="mix-details">
+                         <h4>{{ item.item_name }}</h4>
+                         <a class="mix-link"><i class="fa fa-link"></i></a>
+                         <a data-rel="fancybox-button" title="{{ item.item_location }}" href="{{ item.item_pic.url }}" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                  </div>
               </div>
             </div>
           </div>
