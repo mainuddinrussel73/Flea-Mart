@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+{% extends "firstapp/base4.html" %}
+{% load static from staticfiles %}
+
+  {% block body_block %}
+
+  <ul class="breadcrumb">
+
+      <li><a href="{% url 'User:home' %}">{{ user }} Home</a></li>
+      <li class="active"><a href="">Item Details</a></li>
+  </ul>
+  <style>
+.w3-tangerine {
+  font-family: 'Tangerine', serif;
+  font-size: 4.5em;
+  color: #FF004D;
+}
+</style>
+<script type="text/javascript">
+
+      function myFunc() {
+
+                    document.getElementById('kont').style.display = 'block';
+
+      }
+      $(document).ready(function(){
+            // setTimeout(function() {
+            //   $('#kont').fadeOut('fast');
+            // }, 0);
+
+    //  $('#kont').empty().show().html(message).delay(3000).fadeOut(300);
+
+    $('#chat-form').on('submit', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            url : "{% url 'User:post'  %}",
+            type : 'POST',
+            data : { msgbox : $('#chat-msg').val() , hide : $('#hide').val() },
+
+            success : function(json){
+                $('#chat-msg').val('');
+                $('#msg-list').append('<li class="a">' + json.msg + '</li>');
+                var chatlist = document.getElementById('msg-list-div');
+                chatlist.scrollTop = chatlist.scrollHeight;
+            }
+        });
+    });
+
+    function getMessages(){
+        if (!scrolling) {
+            $.get("{% url 'User:messages'  %}", function(messages){
+                $('#msg-list').html(messages);
+                var chatlist = document.getElementById('msg-list-div');
+                chatlist.scrollTop = chatlist.scrollHeight;
+            });
+        }
+        scrolling = false;
+    }
+
+    var scrolling = false;
+    $(function(){
+        $('#msg-list-div').on('scroll', function(){
+            scrolling = true;
+        });
+        refreshTimer = setInterval(getMessages, 500);
+    });
+
+    $(document).ready(function() {
+         $('#send').attr('disabled','disabled');
+         $('#chat-msg').keyup(function() {
+            if($(this).val() != '') {
+               $('#send').removeAttr('disabled');
+            }
+            else {
+            $('#send').attr('disabled','disabled');
+            }
+         });
+     });
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+
+
+
+      $('#kont .textarea').keypress(function(e){
+          if(e.which == 13 && !e.shiftKey){
+            var name = jQuery.trim($('#kont .textarea').val());
+
+            if(name.length != 0){
+
+                $('#kont # #msg-list').append('<li class="a">'+$('#kont .textarea').val()+'</li>');
+                $("#kont #msg-list-div").animate({ scrollTop: 10000 }, "slow");
+                $('#kont .textarea').val('').empty();
+
+
+            }
+            else{
+
+
+
+            }}
+      });
+
+      $('#kont #name').css({
+      'position' : 'absolute',
+      'left' : '130px',
+      'line-height' : '50px',
+      'font-family' : 'verdana',
+      'font-weight' : 'bold',
+      'color' : 'white'
+      });
+
+      $("#kont #msg-list-div").animate({ scrollTop: 10000 }, "slow");
+
+      $('#kont .send').css('cursor','pointer');
+
+
+       });
+
+</script>
+
+
+<style media="screen">
+
+
+        #kont .bar {
+        position:relative;
+        width:300px;
+        height :52px;
+        background : blue;
+        opacity :0.4;
+        border-radius : 5px 5px 0 0;
+        z-index : -1;
+        }
+
+        #kont .footer {
+            margin-top: 250px;
+            background : #899b8d;
+            width:300px;
+            height :40px;
+        /*position:absolute;
+        z-index : -1;
+        width:300px;
+        height :50px;
+
+        opacity :0.4;
+        border-radius : 0px 0px 5px 5px;
+        bottom:0px;*/
+        }
+
+        #kont  .img{
+          position:absolute;
+          width : 46px;
+          height : 46px;
+          border-radius :50%;
+          right : 4px;
+          top:2px;
+
+          background-size:contain;
+        }
+
+        #kont{
+        display:none;
+        position:relative;
+        margin-left:0px;
+        top:5px;
+        width : 300px;
+        height:350px;
+
+        border-radius : 5px;
+        }
+        #kont #msg-list-div{
+        position:absolute;
+        width:300px;
+        height:248px;
+        background:rgba(255,255,255,0.2);
+        opacity : 0.9;
+        }
+        #kont #msg-list-div li{
+        position:relative;
+
+        }
+        #kont .a{
+        list-style-type:none;
+        position:absolute;
+        word-wrap: break-word;
+        right : 10px;
+        box-shadow : 0 1px 1px grey;
+        border-radius :20px 0 20px 20px;
+        padding : 10px;
+        max-width : 200px ;
+        margin-left:100px;
+        background :#5F9EA0;
+        color:white;
+        font-family:sans-serif;
+        margin-top:5px;
+        }
+
+        #kont .b{
+        margin-right:110px;
+        margin-top:5px;
+        list-style-type:none;
+
+        word-wrap: break-word;
+        max-width : 200px;
+        left:-30px;
+        border-radius :0 20px 20px 20px;
+        padding : 10px;
+        background :	#636A90 ;
+        color:white;
+        font-family:sans-serif;
+        box-shadow : 0 2px 5px grey;
+        }
+
+
+
+
+
+        #kont .text{
+        position:absolute;
+        margin-left: 15px;
+        bottom:5px;
+        border-radius: 0 20px 20px 20px;
+        left:5px;
+        width:250px;
+        height:40px;
+        resize:none;
+        }
+
+        #kont .send img{
+        position:absolute;
+        bottom:3px;
+        right:3px;
+        }
+
+        #kont #msg-list-div{
+        overflow : scroll;
+        overflow-x : hidden;
+        }
+</style>
+    <div class="row margin-bottom-30">
+
+  <div class="col-md-5 front-carousel">
+    <div class="carousel slide" id="myCarousel">
+      <!-- Carousel items -->
+      <div class="carousel-inner">
+        <div class="item">
+          <img alt="" src="{{ instance.item_pic.url }}">
+          <div class="carousel-caption">
+            <p>{{ instance.item_name}}</p>
+          </div>
+        </div>
+        <div class="item active">
+          <img alt="" src="{{ instance.item_pic.url }}">
+          <div class="carousel-caption">
+            <p>{{ instance.item_name}}</p>
+          </div>
+        </div>
+        <div class="item">
+          <img alt="" src="{{ instance.item_pic.url }}">
+          <div class="carousel-caption">
+            <p>{{ instance.item_name}}</p>
+          </div>
+        </div>
+      </div>
+      <!-- Carousel nav -->
+      <a data-slide="prev" href="#myCarousel" class="carousel-control left">
+        <i class="fa fa-angle-left"></i>
+      </a>
+      <a data-slide="next" href="#myCarousel" class="carousel-control right">
+        <i class="fa fa-angle-right"></i>
+      </a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h2>{{ instance.item_name}}</h2>
+    <p>{{ instance.item_reason}}</p>
+    <p class="w3-tangerine">Price : {{ instance.item_exprice}}</p>
+    <p> TK. Only Buy it Now!!!</p>
+    <br>
+    <div class="row front-lists-v2 margin-bottom-15">
+      <div class="col-md-9">
+        <ul class="list-unstyled">
+
+          <li><i class="fa fa-globe"></i>Location : {{ instance.item_location }}</li>
+          <li><i class="fa fa-clock-o"></i>Use Time : Used only {{ instance.item_usetime }}</li>
+          <li><i class="fa fa-sitemap"></i>Product Type : {{ instance.item_type }}</li>
+          <li><i class="fa fa-cloud-upload"></i><strong>Uploader name : {{ instance.uploader }}</strong></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <a class="btn btn-primary" onclick="myFunc();">Chat With Seller</a>
+  </div>
+  <div  class="col-md-3">
+    <div id="kont">
+      <div style="position:absolute;top:2px;left :2px" class="back"></div>
+
+      <div id="name">
+          <label for="firstname">{{ user }}</label>
+      </div>
+      <div class="img">
+            <img src="{{ user.userprofileinfo.profilepic.url }}" class="img-responsive" alt="Mountains">
+      </div>
+      <div class="bar">
+      </div>
+
+
+
+
+
+
+
+      <div id="msg-list-div">
+
+              <ul id="msg-list">
+                  {% for obj in chat %}
+                      {% if obj.user == request.user %}
+                          <li class="a">{{ obj.user }} : {{ obj.message }}</li>
+                      {% elif instance.uploader == obj.user %}
+                          <li class="b">{{ obj.user }} : {{ obj.message }}</li>
+                      {% endif %}
+                  {% empty %}
+                      <li class="text-right list-group-item">No messages yet!</li>
+                  {% endfor %}
+                  <!-- <script>
+                      var chatlist = document.getElementById('msg-list-div');
+                      chatlist.scrollTop = chatlist.scrollHeight;
+                  </script> -->
+              </ul>
+
+
+
+      </div>
+
+      <div class="footer">
+
+        <form class="text" id="chat-form" method="post" action="{% url 'User:post'  %}">
+            {% csrf_token %}
+            <div id="chat-bottom" class="input-group">
+
+                  <input placeholder="Type Here......" type="text" id="chat-msg" name="chat-msg" class="textarea form-control"/>
+
+                  <span class="input-group-btn">
+                      <input class="btn btn-default" id="send" type="submit" value="Send"/>
+                  </span>
+                  <input id="hide" type="hidden" name="id" value="{{ instance.uploader }}">
+            </div>
+        </form>
+
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+  <!-- <img src="{{ instance.item_pic.url }}" class="img-responsive" alt="Mountains"width="240"> -->
+{% endblock %}

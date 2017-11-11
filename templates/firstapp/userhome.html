@@ -95,11 +95,11 @@
                   </script>
                   <ul class="mix-filter">
                     <li <input type="" onclick="filterSelection('all')" name="category" checked> Show all</li>
-                    <li <input type="" onclick="filterSelection('phone')" name="category"> Plone </li>
+                    <li <input type="" onclick="filterSelection('phone')" name="category"> Phone </li>
                     <li <input type="" onclick="filterSelection('tv')" name="category"> TV</li>
                     <li <input type="" onclick="filterSelection('camera')" name="category"> Camera </li>
                   </ul>
-                    <div class="row mix-grid thumbnails">
+                  <div class="row mix-grid thumbnails">
                   {% for item in items %}
                   <div class="column {{ item.item_type }}">
                     <div class="col-md-9 col-sm-1 mix mix_all" style="display: block; opacity: 1; ">
@@ -107,12 +107,13 @@
                       <img src="{{ item.item_pic.url }}" class="img-responsive" alt="Mountains">
                       <div class="mix-details">
                          <h4>{{ item.item_name }}</h4>
-                         <a class="mix-link"><i class="fa fa-link"></i></a>
+                         <a class="mix-link" href="{{ item.get_absolute_url }}"><i class="fa fa-link"></i></a>
                          <a data-rel="fancybox-button" title="{{ item.item_location }}" href="{{ item.item_pic.url }}" class="mix-preview fancybox-button"><i class="fa fa-search"></i></a>
                       </div>
                       </div>
                     </div>
                   </div>
+
                   {% endfor %}
                   </div>
               </div>
