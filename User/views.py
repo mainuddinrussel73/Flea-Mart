@@ -4,12 +4,33 @@ from firstapp.forms import UserForm,UserProfileInform
 from firstapp.models import UserProfileInfo,User
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.contrib.auth import authenticate,login as auth_login,logout
 from User.forms import SellItemInfoForm
-from User.models import SellItemInfo
+from User.models import SellItemInfo,Chat
 
 # Create your views here.
+
+other = None
+@login_required
+def Post(request):
+    if request.method == "POST":
+        msg = request.POST.get('msgbox', None)
+        global other
+        other = request.POST.get('hide', None)
+        print('asdfa'+other)
+        c = Chat(user=request.user, message=msg)
+        if msg != '':
+            c.save()
+        return JsonResponse({ 'msg': msg, 'user': c.user.username })
+    else:
+        return HttpResponse('Request must be POST.')
+
+@login_required
+def Messages(request):
+    c = Chat.objects.all()
+    print(other+'otnerr')
+    return render(request, 'firstapp/messages.html', {'chat': c,'other':other })
 
 @login_required
 def userhome(request,username='main'):
@@ -32,6 +53,21 @@ def userprofile(request,username='main',pk=None):
     items = SellItemInfo.objects.filter(uploader=user)
     args = {'user': user,'items' : items}
     return render(request, 'firstapp/profile.html', args,)
+
+
+@login_required
+def showitem(request,slug=None):
+
+
+    instance = get_object_or_404(SellItemInfo,slug=slug);
+    # instance = SellItemInfo.objects.get(item_name=item_name)
+    c = Chat.objects.all()
+
+    args = {
+        "instance" : instance,
+        'chat': c
+    }
+    return render(request, 'firstapp/details.html', args,)
 
 @login_required
 def sellitem(request):

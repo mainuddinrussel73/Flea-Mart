@@ -3,10 +3,13 @@ from User import views
 
 
 app_name = 'User'
-
+print("post")
 urlpatterns=[
         url(r'^home/$',views.userhome,name='home'),
-
+        url(r'^(?P<slug>[\w-]+)details/$',views.showitem,name='details'),
         url(r'^profile/$',views.userprofile,name='profile'),
         url(r'^sellitem/$',views.sellitem,name='sellitem'),
+        url(r'^post/$', views.Post, name='post'),
+        url(r'^messages/$', views.Messages, name='messages'),
+
 ]
