@@ -34,7 +34,7 @@
         event.preventDefault();
 
         $.ajax({
-            url : "{% url 'User:post'  %}",
+            url  : "{% url 'User:post'  %}",
             type : 'POST',
             data : { msgbox : $('#chat-msg').val() , hide : $('#hide').val() },
 
@@ -345,15 +345,18 @@
       <div id="msg-list-div">
 
               <ul id="msg-list">
-                  {% for obj in chat %}
-                      {% if obj.user == request.user %}
-                          <li class="a">{{ obj.user }} : {{ obj.message }}</li>
-                      {% elif instance.uploader == obj.user %}
-                          <li class="b">{{ obj.user }} : {{ obj.message }}</li>
-                      {% endif %}
-                  {% empty %}
-                      <li class="text-right list-group-item">No messages yet!</li>
-                  {% endfor %}
+                {% for obj in chat %}
+                    {% if obj.user == request.user %}
+                        <li class="a text-right list-group-item">{{ obj.user }} : {{ obj.message }}</li>
+                    {% elif instance.uploader == obj.user.username %}
+                        <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
+                    {% elif instance.uploader == request.user.username %}
+                        <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
+                    {% endif %}
+                {% empty %}
+                    <li class="text-right list-group-item">No messages yet!</li>
+                {% endfor %}
+
                   <!-- <script>
                       var chatlist = document.getElementById('msg-list-div');
                       chatlist.scrollTop = chatlist.scrollHeight;

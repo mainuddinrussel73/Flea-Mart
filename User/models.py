@@ -14,6 +14,14 @@ class Chat(models.Model):
     def __unicode__(self):
         return self.message
 
+class Notification(models.Model):
+    count = models.CharField(max_length=20,null=True)
+    to = models.ForeignKey(User)
+    description = models.CharField(max_length=20,null=True)
+
+    def __unicode__(self):
+        return self.description
+
 class SellItemInfo(models.Model): #never make the model and forms name same it will make u suffer much........(^_^)v
 
     slug = models.SlugField(unique=True);

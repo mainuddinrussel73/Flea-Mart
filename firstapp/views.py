@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth import authenticate,login as auth_login,logout
+from User.models import SellItemInfo
 
 def error_404(request):
     return render(request,'firstapp/404.html')
@@ -14,7 +15,9 @@ def error_500(request):
     return render(request,'firstapp/404.html')
 
 def index(request):
-    return render(request,'firstapp/index.html')
+    items = SellItemInfo.objects.all()
+    args = {'items' : items}
+    return render(request,'firstapp/index.html', args,)
 
 
 

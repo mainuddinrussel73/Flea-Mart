@@ -21,6 +21,9 @@ a:hover {
 .header-navigation li.menu-search i:hover {
   color: #64aed9;
 }
+.header-navigation li.menu-noti i:hover {
+  color: #64aed9;
+}
 .sidebar a:hover {
   color: #64aed9;
 }
@@ -99,6 +102,12 @@ a:hover {
 .header-navigation .search-box {
   border-top: solid 2px #64aed9;
 }
+.header-navigation .noti-box:after { 
+  border-bottom: 8px solid #64aed9;
+}
+.header-navigation .noti-box {
+  border-top: solid 2px #64aed9;
+}
 .title-wrapper h1 span {
   color: #64aed9;
 }
@@ -117,6 +126,9 @@ a:hover {
 .content-search h1 em {
   color: #64aed9;
 }
+.content-noti h1 em {
+  color: #64aed9;
+}
 .recent-work .recent-work-item:hover a.recent-work-description {
   background: #64aed9;
 }
@@ -127,6 +139,9 @@ a:hover {
   color: #64aed9;
 }
 .search-result-item h4 a {
+  color: #64aed9;
+}
+.noti-result-item h4 a {
   color: #64aed9;
 }
 .top-cart-content:after { 
@@ -288,6 +303,9 @@ a:hover {
   border: solid 1px #64aed9;
 }
 .content-search input:focus {
+  border: solid 1px #64aed9;
+}
+.content-noti input:focus {
   border: solid 1px #64aed9;
 }
 
