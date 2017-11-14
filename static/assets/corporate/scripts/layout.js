@@ -151,6 +151,39 @@ var Layout = function () {
             });
         }
     }
+	var handleNotification = function() {    
+        $('.noti-btn').click(function () {            
+            if($('.noti-btn').hasClass('show-noti-icon')){
+                if ($(window).width()>767) {
+                    $('.noti-box').fadeOut(300);
+                } else {
+                    $('.noti-box').fadeOut(0);
+                }
+                $('.noti-btn').removeClass('show-noti-icon');
+            } else {
+                if ($(window).width()>767) {
+                    $('.noti-box').fadeIn(300);
+                } else {
+                    $('.noti-box').fadeIn(0);
+                }
+                $('.noti-btn').addClass('show-noti-icon');
+            } 
+        }); 
+
+        // close search box on body click
+        if($('.noti-btn').size() != 0) {
+            $('.noti-box, .noti-btn').on('click', function(e){
+                e.stopPropagation();
+            });
+
+            $('body').on('click', function() {
+                if ($('.noti-btn').hasClass('show-noti-icon')) {
+                    $('.noti-btn').removeClass("show-noti-icon");
+                    $('.noti-box').fadeOut(300);
+                }
+            });
+        }
+    }
 
     var handleMenu = function() {
         $(".header .navbar-toggle").click(function () {
@@ -303,6 +336,7 @@ var Layout = function () {
             handleResponsiveOnResize();
             handleIEFixes();
             handleSearch();
+			handleNotification();
             handleFancybox();
             handleDifInits();
             handleSidebarMenu();

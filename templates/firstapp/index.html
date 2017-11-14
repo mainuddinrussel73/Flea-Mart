@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 {% extends "firstapp/base2.html" %}
-
+{% load static from staticfiles %}
 
 
   {% block body_block %}
+
         <!-- BEGIN SERVICE BOX -->
         <div class="row service-box margin-bottom-40">
           <div class="col-md-4 col-sm-4">
@@ -39,94 +40,21 @@
           </div>
           <div class="col-md-9">
             <div class="owl-carousel owl-carousel3">
-              <div class="recent-work-item">
-                <em>
-                  <img src="assets/pages/img/works/iphone.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="assets/pages/img/works/iphone.jpg" class="fancybox-button" title="Iphone 6 (64 GB)" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>Iphone 6 (used)</strong>
-                  <b>Uttara,Dhaka</b>
-                </a>
-              </div>
-              <div class="recent-work-item">
-                <em>
-                  <img src="assets/pages/img/works/guiter.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="assets/pages/img/works/guiter.jpg" class="fancybox-button" title="Guiter (Gibson)" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>Guiter (used)</strong>
-                  <b>Banani,Dhaka</b>
-                </a>
-              </div>
-              <div class="recent-work-item">
-                <em>
-                  <img src="assets/pages/img/works/laptop.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="assets/pages/img/works/laptop.jpg" class="fancybox-button" title="Project Name #3" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>laptop (used)</strong>
-                  <b>Gabtoli,Khulna</b>
-                </a>
-              </div>
-              <div class="recent-work-item">
-                <em>
-                  <img src="assets/pages/img/works/xbox.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="assets/pages/img/works/xbox.jpg" class="fancybox-button" title="Project Name #4" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>Amazing Project</strong>
-                  <b>Agenda corp.</b>
-                </a>
-              </div>
-              <div class="recent-work-item">
-                <em>
-                  <img src="static/assets/pages/img/works/img5.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="static/assets/pages/img/works/img5.jpg" class="fancybox-button" title="Project Name #5" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>Amazing Project</strong>
-                  <b>Agenda corp.</b>
-                </a>
-              </div>
-              <div class="recent-work-item">
-                <em>
-                  <img src="assets/pages/img/works/img6.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="assets/pages/img/works/img6.jpg" class="fancybox-button" title="Project Name #6" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>Amazing Project</strong>
-                  <b>Agenda corp.</b>
-                </a>
-              </div>
-              <div class="recent-work-item">
-                <em>
-                  <img src="assets/pages/img/works/img3.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="assets/pages/img/works/img3.jpg" class="fancybox-button" title="Project Name #3" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>Amazing Project</strong>
-                  <b>Agenda corp.</b>
-                </a>
-              </div>
-              <div class="recent-work-item">
-                <em>
-                  <img src="assets/pages/img/works/img4.jpg" alt="Amazing Project" class="img-responsive">
-                  <a href="portfolio-item.html"><i class="fa fa-link"></i></a>
-                  <a href="assets/pages/img/works/img4.jpg" class="fancybox-button" title="Project Name #4" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
-                </em>
-                <a class="recent-work-description" href="javascript:;">
-                  <strong>Amazing Project</strong>
-                  <b>Agenda corp.</b>
-                </a>
-              </div>
+                {% for item in items %}
+                    <div class="recent-work-item">
+                      <em>
+                        <img src="{{ item.item_pic.url }}" alt="Amazing Project" class="img-responsive">
+                        <a href="{% url 'firstapp:login' %}"><i class="fa fa-link"></i></a>
+                        <a href="{{ item.item_pic.url }}" class="fancybox-button" title="{{ item.item_name }}" data-rel="fancybox-button"><i class="fa fa-search"></i></a>
+                      </em>
+                      <a class="recent-work-description" href="javascript:;">
+                        <strong>{{ item.item_name }}</strong>
+                        <b>{{ item.item_location }}</b>
+                      </a>
+                    </div>
+                {% endfor %}
+
+
             </div>
           </div>
         </div>
