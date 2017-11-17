@@ -11,6 +11,7 @@ urlpatterns=[
         url(r'^sellitem/$',views.sellitem,name='sellitem'),
         url(r'^post/$', views.Post, name='post'),
         url(r'^notification/$', views.Notifications, name='notification'),
+        url(r'^notificationupdate/$', views.Notificationsupdate, name='notificationupdate'),
         url(r'^messages/$', views.Messages, name='messages'),
 
 ]

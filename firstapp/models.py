@@ -9,8 +9,9 @@ class UserProfileInfo(models.Model):
     profilepic = models.ImageField(upload_to='profilepics',blank=True)
     address = models.TextField(blank=True)
 
-    def __str__(self):
+    def get_name(self):
         return self.user.username
-
+    def get_some(self):
+        return self.profilepic
     def get_absolute_url(self):
         return reverse("username", kwargs={"username": self.user.username})

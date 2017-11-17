@@ -36,7 +36,7 @@
         $.ajax({
             url  : "{% url 'User:post'  %}",
             type : 'POST',
-            data : { msgbox : $('#chat-msg').val() , hide : $('#hide').val() },
+            data : { msgbox : $('#chat-msg').val() , hide : $('#hide').val() ,itemname : $('#itemname').val() },
 
             success : function(json){
                 $('#chat-msg').val('');
@@ -379,6 +379,7 @@
                       <input class="btn btn-default" id="send" type="submit" value="Send"/>
                   </span>
                   <input id="hide" type="hidden" name="id" value="{{ instance.uploader }}">
+                  <input id="itemname" type="hidden" name="id1" value="{{ instance.item_name }}">
             </div>
         </form>
 
