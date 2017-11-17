@@ -10,6 +10,12 @@ from User.forms import SellItemInfoForm
 from User.models import SellItemInfo,Chat,Notification
 from django.core import serializers
 from django.forms.models import model_to_dict
+from itertools import chain,cycle
+from itertools import izip_longest
+import re
+from collections import Counter
+import string
+
 
 # from django.core import serializers
 # json_serializer = serializers.get_serializer("json")()
@@ -28,14 +34,18 @@ other = None
 def Post(request):
     if request.method == "POST":
         msg = request.POST.get('msgbox', None)
+
         global other
         other = request.POST.get('hide', None)
-        # print('asdfa'+other)
+        itemname = request.POST.get('itemname', None)
+        # print('asdfa'+itemname)
         c = Chat(user=request.user, message=msg)
+        counter = SellItemInfo.objects.get(item_name=itemname)
+        n = Notification(user=request.user,to=request.user.username,fromm=other,count=counter.get_slug(),description=msg)
         if msg != '':
             c.save()
+            n.save()
         return JsonResponse({ 'msg': msg, 'user': c.user.username })
-
     else:
         return HttpResponse('Request must be POST.')
 
@@ -50,37 +60,73 @@ def Messages(request):
 
 
 @login_required
+def Notificationsupdate(request):
+    m = []
+    text = 'asfa'
+    print(text+'asasdf')
+    if request.method == "POST":
+        text = request.POST['text']
+        city = request.POST['city']
+        m.append("asdfasdf")
+    return JsonResponse(json.dumps(m))
+
+@login_required
 def Notifications(request,username='main'):
     # counter = Notification.objects.all()
     #
     # # print(c.description)
     # return render(request, 'firstapp/notification.html', {'counter': counter})
     if request.is_ajax():
-        # username = request.GET.get('user', '')
-        u = User.objects.get(username=request.user.username)
-        counter = Notification.objects.all()
-        # data = serializers.serialize('json', counter)
-        result_list = list(counter.values('count', 'to','description'))
-        return HttpResponse(json.dumps(result_list))
-        # do whatever processing you need
-        # user.some_property = whatever
-        # print(counter.to)
-        # send back whatever properties you have updated
+        counter = Notification.objects.exclude(to=request.user)
+        hhh = list(counter.values('to','description','count','id'))
+        bonus = UserProfileInfo.objects.exclude(user=request.user)
+        ggg = list(bonus.values('user','profilepic','user_id'))
+        items = SellItemInfo.objects.filter(uploader=request.user)
+        it = list(items.values('slug','uploader'))
+        lll = []
+        u = 0
+        result = list(counter.values('user','to','description','count','fromm'))
 
 
-        # return HttpResponse(json.dumps(json_response),
-        #     content_type='application/json')
+        for f, b in zip(ggg,result):
+            for o in it:
 
-        # return render(request, 'firstapp/notification.html',  {"obj_as_json": simplejson.dumps(data)})
+                if(b.get('count')==o.get('slug') ):
+                    nnn = {
+                        'id' : f.get('user'),
+                        'profilepic' : f.get('profilepic'),
+                        'to' : b.get('to'),
+                        'description' : b.get('description'),
+                        'count' : b.get('count'),
+                        'fromm' : b.get('fromm')
+                    }
+                    lll.insert(u,nnn)
+                    u+=1
 
+        # print(json.dumps(lll))
+
+        return HttpResponse(json.dumps(lll))
+def compare(s1, s2):
+    remove = string.punctuation + string.whitespace
+    return s1.translate(None, remove) == s2.translate(None, remove)
+def combine(list1, list2):
+    list1 = iter(list1)
+    for item2 in list2:
+        if item2 == list2[0]:
+            item1 = next(list1)
+        yield ''.join(map(str, (item1, item2)))
 
 @login_required
 def userhome(request,username='main'):
     u = User.objects.get(username=request.user.username)
-    counter = Notification.objects.all()
-    # print(c.description)
+    counter = Notification.objects.exclude(user=request.user)
+    bonus = UserProfileInfo.objects.exclude(user=request.user)
+    hhh = list(counter.values('to','description','count','fromm'))
+    bbb = list(bonus.values('profilepic'))
+    fin = zip(hhh,bbb)
+    # print(hhh)
     items = SellItemInfo.objects.all()
-    args = {'items' : items,'counter':counter }
+    args = {'items' : items,'counter' : fin }
     return render(request,'firstapp/userhome.html',args)
 
 @login_required
@@ -100,13 +146,18 @@ def userprofile(request,username='main',pk=None):
 
 
 @login_required
-def showitem(request,slug=None):
+def showitem(request,slug=None,id=None):
 
 
     instance = get_object_or_404(SellItemInfo,slug=slug);
     # instance = SellItemInfo.objects.get(item_name=item_name)
     c = Chat.objects.all()
-
+    # u = request.get('id')
+    # ins = Notification.objects.get(count=slug)
+    # print(ins)
+    # for r in instance:
+        # r.delete()
+    print(request.user)
     args = {
         "instance" : instance,
         'chat': c

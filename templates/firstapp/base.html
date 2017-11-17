@@ -279,6 +279,9 @@
             </li>
             <!-- END TOP SEARCH -->
             <style media="screen">
+
+
+
             .badge1[data-badge]:after {
                   content:attr(data-badge);
                   position:relative;
@@ -315,8 +318,14 @@
                 }
 
                 /* Dropdown Content (Hidden by Default) */
+                @font-face {
+                    font-family: myFirstFont;
+                    src: url('https://fonts.googleapis.com/css?family=Open+Sans');
+                }
                 .dropdownc-content {
+
                     display: none;
+                    left: -80px;
                     position: absolute;
                     background-color: #f9f9f9;
                     min-width: 160px;
@@ -327,91 +336,125 @@
                 /* Links inside the dropdown */
                 .dropdownc-content a {
                     color: black;
+                    font-family: myFirstFont;
+                    background-color:#FCFAFA;
                     padding: 12px 16px;
                     text-decoration: none;
                     display: block;
+
+
                 }
 
                 /* Change color of dropdown links on hover */
-                .dropdownc-content a:hover {background-color: #f1f1f1}
+                .dropdownc-content a:hover {
+                    left: 0;
+                    background-color: #E2F7F1;
+                    color:#581845;
+                }
 
                 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
                 .show {display:block;}
             </style>
 
             <script type="text/javascript">
-                $(document).ready(function(){
-                  $(function(event){
-                      event.preventDefault();
 
-                      $.ajax({
-                          url  : "{% url 'User:post'  %}",
-                          type : 'GET',
-                          data : { msgbox : $('#chat-msg').val() , hide : $('#hide').val() },
 
-                          success : function(json){
-                              $('#chat-msg').val('');
-                              $('#msg-list').append('<li class="a">' + json.msg + '</li>');
-                              var chatlist = document.getElementById('msg-list-div');
-                              chatlist.scrollTop = chatlist.scrollHeight;
-                          }
+
+            // var divOne = document.getElementById('#yoo');
+            // divOne.style.display='none';
+            //var linker;
+            // window.onload=function() {
+            //   var listItems = document.getElementsByTagName("a"); // or document.querySelectorAll("li");
+            //   for (var i = 0; i < listItems.length; i++) {
+            //     listItems[i].onclick = function() {//this.parentNode.removeChild(this);
+            //
+            //           window.location.href = "/User/"+linker+"details/";
+            //
+            //
+            //
+            //    }
+            //  }
+            // }
+
+
+
+
+                    function getNotifications(){
+
+
+                      $.get("{% url 'User:notification'  %}", {}, function(result_list) {
+                              jsonData = JSON.parse(result_list);
+                              var c;
+                              var news;
+                              var img;
+                              for (var i = 0; i < jsonData.length; i++) {
+                                  c = jsonData[i];
+                              }
+                              var lis = $("#myDropdown a");
+                              if(lis.length < jsonData.length) {
+                                //$("#myDropdown").append("<a>"+c.to+"->"+c.description+"</a>");
+                                  var link = document.createElement('a');
+                                  // link.href = "/User/"+c.count+"details/";
+                                  link.textContent =  c.to+"->"+c.description ;
+                                  link.href = "/User/"+c.count+"details/";
+                                  document.getElementById('myDropdown').appendChild(link);
+
+                              }
+                              else if(lis.length > jsonData.length){
+                                  $("#myDropdown").remove("<li>"+counter.to+"->"+counter.description+"</li>");
+
+                              }
+
+
+
                       });
-                  });
 
+                    }
 
+                  function myFunctio() {
+                      document.getElementById("myDropdown").classList.toggle("show");
+                              // var companies = '{{ companies|escapejs }}';
+                              // $('#myDropdown').html(<a> companies.count </a>);
+                              //$('#myDropdown').html('');
 
-                  function getNotifications(){
-
-                          $.get("{% url 'User:notification'  %}", function(notification){
-                              $('#myDropdown').html(notification);
-
-                          });
-
-
+                            //  var myVar0 = setInterval(deleteNotification, 500);
+                              var myVar = setInterval(getNotifications, 1000);
                   }
-
-
-                  $(function(){
-
-                      refreshTimer = setInterval(getNotifications, 500);
-                  });
-
-
-              function myFunctio() {
-                    document.getElementById("myDropdown").classList.toggle("show");
-                  }
-
-                  // Close the dropdown menu if the user clicks outside of it
                   window.onclick = function(event) {
                   if (!event.target.matches('.dropbtn')) {
-
-                    var dropdowns = document.getElementsByClassName("dropdownc-content");
-                    var i;
-                    for (i = 0; i < dropdowns.length; i++) {
-                      var openDropdown = dropdowns[i];
-                      if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
+                      var dropdowns = document.getElementsByClassName("dropdownc-content");
+                      var i;
+                      for (i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                          openDropdown.classList.remove('show');
+                        }
                       }
                     }
                   }
-                  }
-                });
             </script>
             <li class="dropdown" >
               <div class="dropdownc">
-                <button id="click-btn" class="badge1 dropbtn" data-badge="_6_">
+                <button id="btn-click" class="badge1 dropbtn" data-badge="_6_">
                     <i  onclick="myFunctio()" class="fa fa-bell dropbtn"></i>
               </button>
 
               <div id="myDropdown" class="dropdownc-content">
                   <!-- <a href="#">c</a> -->
-                {% for obj in c %}
-                    <!-- {% if other == obj.user.username %} -->
-                        <a>{{ obj.user.username }}</a>
-                    <!-- {% endif %} -->
-                {% empty %}
-                      <a>00</a>
+                  <!-- <a>asasdfasdf</a> -->
+
+                {% for obj,name in counter %}
+                    {% for item in items %}
+                        {% if item.slug == obj.count %}
+                          <a id="yoo" href="{{ item.get_absolute_url }}"> {{ obj.to }}->{{ obj.description }}<button class="close">&times;</button></a>
+                        {% endif %}
+
+                    {% endfor %}
+
+
                 {% endfor %}
+
+
 
               </div>
             </div>

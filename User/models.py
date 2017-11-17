@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from firstapp.models import UserProfileInfo
 from django.core.urlresolvers import reverse
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
-
+import string
 
 class Chat(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -16,10 +17,18 @@ class Chat(models.Model):
 
 class Notification(models.Model):
     count = models.CharField(max_length=20,null=True)
-    to = models.ForeignKey(User)
+    to = models.CharField(max_length=20)
+    fromm =  models.CharField(max_length=20)
+    user = models.ForeignKey(User)
     description = models.CharField(max_length=20,null=True)
 
+    def __str__(self):
+        return str(self.count)
     def __unicode__(self):
+        return self.to
+    def natural_key(self):
+        return (self.to)
+    def get_description(self):
         return self.description
 
 class SellItemInfo(models.Model): #never make the model and forms name same it will make u suffer much........(^_^)v
@@ -34,6 +43,10 @@ class SellItemInfo(models.Model): #never make the model and forms name same it w
     item_reason = models.TextField(blank=False)
     item_pic = models.ImageField(upload_to='useritems',blank=True)
 
+    def __str__(self):
+        return str(self.slug)
+    def get_slug(self):
+        return self.slug
     def get_absolute_url(self):
         return reverse("User:details",kwargs={"slug":self.slug})
         # return "/details/%s/" %(self.id)
