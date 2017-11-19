@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 {% extends "firstapp/base.html" %}
 {% load static from staticfiles %}
-
+  {% block title_block %}
+    <title>{{ user }} Home</title>
+  {% endblock %}
   {% block body_block %}
 
         <ul class="breadcrumb">

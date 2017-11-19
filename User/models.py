@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from firstapp.models import UserProfileInfo
 from django.core.urlresolvers import reverse
@@ -10,6 +11,8 @@ import string
 class Chat(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User)
+    to = models.CharField(max_length=20)
+    fromm =  models.CharField(max_length=20)
     message = models.CharField(max_length=200,null=True)
 
     def __unicode__(self):
@@ -42,13 +45,18 @@ class SellItemInfo(models.Model): #never make the model and forms name same it w
     item_usetime = models.CharField(max_length=15,blank=False)
     item_reason = models.TextField(blank=False)
     item_pic = models.ImageField(upload_to='useritems',blank=True)
-
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL,blank=True,related_name='item_likes')
+    likecount = models.IntegerField(default=0);
     def __str__(self):
         return str(self.slug)
     def get_slug(self):
         return self.slug
     def get_absolute_url(self):
         return reverse("User:details",kwargs={"slug":self.slug})
+    # def get_like_url(self):
+    #     return reverse("User:like-toggle", kwargs={"slug": self.slug})
+    def get_api_like_url(self):
+        return reverse("User:likes-api-toggle", kwargs={"slug": self.slug})
         # return "/details/%s/" %(self.id)
 def create_slug(instance,new_slag=None):
     slug = slugify(instance.item_name)

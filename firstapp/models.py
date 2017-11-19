@@ -8,7 +8,7 @@ class UserProfileInfo(models.Model):
     portfolio = models.URLField(blank=True)
     profilepic = models.ImageField(upload_to='profilepics',blank=True)
     address = models.TextField(blank=True)
-
+    
     def get_name(self):
         return self.user.username
     def get_some(self):

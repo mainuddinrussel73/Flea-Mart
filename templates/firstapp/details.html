@@ -18,6 +18,8 @@
 </style>
 <script type="text/javascript">
 
+
+
       function myFunc() {
 
                     document.getElementById('kont').style.display = 'block';
@@ -28,6 +30,38 @@
             //   $('#kont').fadeOut('fast');
             // }, 0);
 
+            $(".like-btn").click(function(e){
+               e.preventDefault()
+               var this_ = $(this)
+               var likeUrl = this_.attr("data-href")
+               var likeCount = parseInt(this_.attr("data-likes")) | 0
+               if(likeUrl ){
+                 $.ajax({
+                   url : likeUrl,
+                   method : "GET",
+                   data : {},
+                   success: function(data){
+                     var newLikes;
+                     var ne;
+                     if(data.liked){
+                        newLikes = data.ne;
+
+                        updateText(this_,ne,newLikes,"Unlike");
+                     }
+                     else {
+                        newLikes = data.ne;
+
+                        updateText(this_,ne,newLikes,"Like");
+                     }
+                     console.log(data)
+                   },error: function(error){
+                     console.log(error)
+                     console.log("error");
+                   }
+                 })
+               }
+
+            })
     //  $('#kont').empty().show().html(message).delay(3000).fadeOut(300);
 
     $('#chat-form').on('submit', function(event){
@@ -36,7 +70,7 @@
         $.ajax({
             url  : "{% url 'User:post'  %}",
             type : 'POST',
-            data : { msgbox : $('#chat-msg').val() , hide : $('#hide').val() ,itemname : $('#itemname').val() },
+            data : { msgbox : $('#chat-msg').val() , hide : $('#hide').val() ,itemname : $('#itemname').val(),iteuploader : $('#iteuploader').val() },
 
             success : function(json){
                 $('#chat-msg').val('');
@@ -46,7 +80,30 @@
             }
         });
     });
+    function getLikes(){
 
+
+      $.get("{%  url 'User:likesupdate'  %}", {}, function(result_list) {
+        jsonData = JSON.parse(result_list);
+        var c
+        for (var i = 0; i < jsonData.length; i++) {
+            c = jsonData[i];
+        }
+
+
+
+      });
+
+    }
+    window.onload = function() {
+        var myVar = setInterval(getLikes, 1000);
+    };
+    function updateText(btn,ne,newCount,verd){
+      var nos = $('.nos');
+      // btn.attr("data-likes", newCount)
+      nos.text(newCount);
+      btn.text(verd);
+    }
     function getMessages(){
         if (!scrolling) {
             $.get("{% url 'User:messages'  %}", function(messages){
@@ -146,6 +203,8 @@
 
 
        });
+
+
 
 </script>
 
@@ -272,24 +331,28 @@
 
   <div class="col-md-5 front-carousel">
     <div class="carousel slide" id="myCarousel">
+      <a class="like-btn" data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' >{{ liked }}</a>
       <!-- Carousel items -->
       <div class="carousel-inner">
         <div class="item">
           <img alt="" src="{{ instance.item_pic.url }}">
           <div class="carousel-caption">
             <p>{{ instance.item_name}}</p>
+            <p class="nos">{{ obj.likes.count }}</p>
           </div>
         </div>
         <div class="item active">
           <img alt="" src="{{ instance.item_pic.url }}">
           <div class="carousel-caption">
             <p>{{ instance.item_name}}</p>
+            <p class="nos">{{ obj.likes.count }}</p>
           </div>
         </div>
         <div class="item">
           <img alt="" src="{{ instance.item_pic.url }}">
           <div class="carousel-caption">
             <p>{{ instance.item_name}}</p>
+            <p class="nos">{{ obj.likes.count }}</p>
           </div>
         </div>
       </div>
@@ -348,9 +411,9 @@
                 {% for obj in chat %}
                     {% if obj.user == request.user %}
                         <li class="a text-right list-group-item">{{ obj.user }} : {{ obj.message }}</li>
-                    {% elif instance.uploader == obj.user.username %}
+                    {% elif request.user.username == obj.fromm  %}
                         <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
-                    {% elif instance.uploader == request.user.username %}
+                    {% elif instance.uploader == request.user.username  %}
                         <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
                     {% endif %}
                 {% empty %}
@@ -379,7 +442,9 @@
                       <input class="btn btn-default" id="send" type="submit" value="Send"/>
                   </span>
                   <input id="hide" type="hidden" name="id" value="{{ instance.uploader }}">
+
                   <input id="itemname" type="hidden" name="id1" value="{{ instance.item_name }}">
+                  <input id="iteuploader" type="hidden" name="id2" value="{{ instance.uploader }}">
             </div>
         </form>
 

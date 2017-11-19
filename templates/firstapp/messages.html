@@ -1,10 +1,10 @@
 {% for obj in chat %}
     {% if obj.user == request.user %}
-        <li class="a text-right list-group-item">{{ obj.user }} : {{ obj.message }}</li>
-    {% elif other == obj.user.username %}
-        <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
-    {% elif other == request.user.username %}
-        <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
+        <li class="a text-right list-group-item">{{ obj.user }} :  {{ obj.message }}</li>
+    {% elif request.user.username == obj.fromm  %}
+        <li class="b text-left list-group-item">{{ obj.user }}  : {{ obj.message }}</li>
+    {% elif other == request.user.username  %}
+        <li class="b text-left list-group-item">{{ obj.user }}  : {{ obj.message }}</li>
     {% endif %}
 {% empty %}
     <li class="text-right list-group-item">No messages yet!</li>

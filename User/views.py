@@ -15,7 +15,8 @@ from itertools import izip_longest
 import re
 from collections import Counter
 import string
-
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import RedirectView
 
 # from django.core import serializers
 # json_serializer = serializers.get_serializer("json")()
@@ -24,11 +25,48 @@ import string
 # Create your views here.
 
 other = None
+nam = ""
+iteuploader = None
+slugg_ = None
 
 
 
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+class PostLikeAPIToggle(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
 
+    def get(self, request, slug=None, format=None):
+        # slug = self.kwargs.get("slug")
+        obj = get_object_or_404(SellItemInfo, slug=slug)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        updated = False
+        liked = False
+        ne = 0
+        if user.is_authenticated():
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+                obj.likecount-=1
+                ne = obj.likecount
+                obj.save()
+            else:
+                liked = True
+                obj.likes.add(user)
+                obj.likecount+=1
+                ne = obj.likecount
+                obj.save()
+            updated = True
+        data = {
+            "updated": updated,
+            "liked": liked,
+            "ne"   :  ne
+        }
+        return Response(data)
 
 @login_required
 def Post(request):
@@ -36,14 +74,21 @@ def Post(request):
         msg = request.POST.get('msgbox', None)
 
         global other
+        global iteuploader
         other = request.POST.get('hide', None)
         itemname = request.POST.get('itemname', None)
+        iteuploader = request.POST.get('iteuploader', None)
         # print('asdfa'+itemname)
-        c = Chat(user=request.user, message=msg)
+        if other != request.user.username:
+            c = Chat(user=request.user, message=msg,fromm=other,to=request.user.username)
+        else:
+            c = Chat(user=request.user, message=msg,fromm=nam,to=request.user.username)
         counter = SellItemInfo.objects.get(item_name=itemname)
         n = Notification(user=request.user,to=request.user.username,fromm=other,count=counter.get_slug(),description=msg)
+        m = Notification.objects.filter(user=request.user,count=counter.get_slug())
         if msg != '':
             c.save()
+        if m.count()==0 and request.user.username != iteuploader:
             n.save()
         return JsonResponse({ 'msg': msg, 'user': c.user.username })
     else:
@@ -54,21 +99,20 @@ def Messages(request):
     c = Chat.objects.all()
     # print('otnerr')
     # print(c.user.username)
-    return render(request, 'firstapp/messages.html', {'chat': c,'other':other })
+    return render(request, 'firstapp/messages.html', {'chat': c,'other':other,'iteuploader':iteuploader })
 
 
 
 
 @login_required
-def Notificationsupdate(request):
-    m = []
-    text = 'asfa'
-    print(text+'asasdf')
-    if request.method == "POST":
-        text = request.POST['text']
-        city = request.POST['city']
-        m.append("asdfasdf")
-    return JsonResponse(json.dumps(m))
+def Likesupdate(request):
+    obj = get_object_or_404(SellItemInfo, slug=slugg_)
+    user = request.user
+    obj_ = []
+    print(obj)
+    obj_ = list(obj.values('likecount','slug'))
+    print(obj_)
+    return JsonResponse(json.dumps(obj_))
 
 @login_required
 def Notifications(request,username='main'):
@@ -151,17 +195,50 @@ def showitem(request,slug=None,id=None):
 
     instance = get_object_or_404(SellItemInfo,slug=slug);
     # instance = SellItemInfo.objects.get(item_name=item_name)
+
     c = Chat.objects.all()
     # u = request.get('id')
-    # ins = Notification.objects.get(count=slug)
-    # print(ins)
+    global nam
+    namw = ""
+    global slug_
+    slug_ = slug
+    obj = get_object_or_404(SellItemInfo, slug=slug)
+    user = request.user
+    liked = False
+    if user.is_authenticated():
+        if user in obj.likes.all():
+            liked = "Unlike"
+        else:
+            liked = "Like"
+
+    if slug!=None and request.user==instance.uploader:
+        try:
+            ins = Notification.objects.get(count=slug)
+            i = Notification.objects.get(count=slug)
+            namw = i.to
+
+            ins.delete()
+
+        except ObjectDoesNotExist:
+            ins = None
+            i = None
+            namw = ""
+
+
+        # print(ins)
+
+
     # for r in instance:
         # r.delete()
-    print(request.user)
+    nam = namw
+    print(nam+"////////////////////////////")
     args = {
         "instance" : instance,
-        'chat': c
-    }
+        'chat': c,
+        'nam' : nam,
+        "liked": liked,
+        "obj" : obj
+     }
     return render(request, 'firstapp/details.html', args,)
 
 @login_required
