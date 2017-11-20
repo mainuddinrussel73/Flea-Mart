@@ -80,15 +80,21 @@
             }
         });
     });
+
     function getLikes(){
 
 
-      $.get("{%  url 'User:likesupdate'  %}", {}, function(result_list) {
-        jsonData = JSON.parse(result_list);
-        var c
-        for (var i = 0; i < jsonData.length; i++) {
-            c = jsonData[i];
-        }
+      $.get("{%  url 'User:likesupdate' instance %}", {}, function(result_list) {
+        jsonDat = JSON.parse(result_list);
+
+        var nos = $('.nos');
+        var c = jsonDat[0];
+        nos.text(c.likecount);
+
+        // for (var i = 0; i < jsonData.length; i++) {
+        //     c = jsonData[i];
+        // }
+
 
 
 

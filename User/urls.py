@@ -11,7 +11,7 @@ app_name = 'User'
 
 urlpatterns=[
         url(r'^home/$',views.userhome,name='home'),
-        url(r'^likesupdate/$', views.Likesupdate, name='likesupdate'),
+        url(r'^(?P<slug>[\w-]+)likesupdate/$',views.Likesupdate,name='likesupdate'),
         url(r'^(?P<slug>[\w-]+)details/$',views.showitem,name='details'),
         # url(r'^(?P<slug>[\w-]+)/like/$', PostLikeToggle.as_view(), name='like-toggle'),
         url(r'^api/(?P<slug>[\w-]+)/likes/$',PostLikeAPIToggle.as_view(),name='likes-api-toggle'),
