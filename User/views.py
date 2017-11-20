@@ -105,14 +105,17 @@ def Messages(request):
 
 
 @login_required
-def Likesupdate(request):
-    obj = get_object_or_404(SellItemInfo, slug=slugg_)
-    user = request.user
-    obj_ = []
-    print(obj)
-    obj_ = list(obj.values('likecount','slug'))
-    print(obj_)
-    return JsonResponse(json.dumps(obj_))
+def Likesupdate(request,slug=None):
+
+    if request.is_ajax():
+        obj = SellItemInfo.objects.filter(slug=slug)
+
+        obj_ = []
+
+        obj_ = list(obj.values('likecount'))
+        # print(json.dumps(obj_))
+        return HttpResponse(json.dumps(obj_))
+
 
 @login_required
 def Notifications(request,username='main'):
