@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.contrib.auth import authenticate,login as auth_login,logout
-from User.forms import SellItemInfoForm
-from User.models import SellItemInfo,Chat,Notification
+from User.forms import SellItemInfoForm,CommentsForm
+from User.models import SellItemInfo,Chat,Notification,Comments
 from django.core import serializers
 from django.forms.models import model_to_dict
 from itertools import chain,cycle
@@ -17,7 +17,8 @@ from collections import Counter
 import string
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import RedirectView
-
+from django.utils import timezone
+from django.contrib.contenttypes.models import ContentType
 # from django.core import serializers
 # json_serializer = serializers.get_serializer("json")()
 # companies = json_serializer.serialize(Notification.objects.all().order_by('id')[:5], ensure_ascii=False)
@@ -192,12 +193,35 @@ def userprofile(request,username='main',pk=None):
     return render(request, 'firstapp/profile.html', args,)
 
 
+
+@login_required
+def Comment(request):
+
+
+    if request.method == 'POST':
+        co = request.POST['co']
+        slug = request.POST['slug']
+
+        print(slug)
+        print(co)
+        item = SellItemInfo.objects.get(slug=slug);
+        username = request.user.username
+        c = Comments(user=request.user,item=item,username=request.user.username,content=co)
+
+        if co != '':
+             c.save()
+
+        return JsonResponse({ 'comm': co, 'user': request.user.username,'timestemp':c.timestemp,'profilepic' : request.user.userprofileinfo.profilepic.url })
+    else:
+        return HttpResponse('Request must be POST.')
 @login_required
 def showitem(request,slug=None,id=None):
 
 
     instance = get_object_or_404(SellItemInfo,slug=slug);
     # instance = SellItemInfo.objects.get(item_name=item_name)
+    comments = Comments.objects.filter(item=instance);
+
 
     c = Chat.objects.all()
     # u = request.get('id')
@@ -234,13 +258,17 @@ def showitem(request,slug=None,id=None):
     # for r in instance:
         # r.delete()
     nam = namw
-    print(nam+"////////////////////////////")
+
     args = {
         "instance" : instance,
         'chat': c,
         'nam' : nam,
         "liked": liked,
-        "obj" : obj
+        "obj" : obj,
+        "comments" : comments
+
+
+
      }
     return render(request, 'firstapp/details.html', args,)
 

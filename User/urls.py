@@ -18,6 +18,7 @@ urlpatterns=[
         url(r'^profile/$',views.userprofile,name='profile'),
         url(r'^sellitem/$',views.sellitem,name='sellitem'),
         url(r'^post/$', views.Post, name='post'),
+        url(r'^comment/$', views.Comment, name='comment'),
         url(r'^notification/$', views.Notifications, name='notification'),
         url(r'^messages/$', views.Messages, name='messages'),
 

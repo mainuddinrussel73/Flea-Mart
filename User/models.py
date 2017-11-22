@@ -8,6 +8,16 @@ from django.db.models.signals import pre_save
 from django.utils.text import slugify
 import string
 
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
+class CommentsManager(models.Manager):
+    def filter_by_instance(self,instance):
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        obj_id = instance.id
+        qs = super(CommentsManager,self).filter(content_type=content_type,object_id=obj_id)
+        return qs
+
 class Chat(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User)
@@ -58,6 +68,16 @@ class SellItemInfo(models.Model): #never make the model and forms name same it w
     def get_api_like_url(self):
         return reverse("User:likes-api-toggle", kwargs={"slug": self.slug})
         # return "/details/%s/" %(self.id)
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
+    @property
+    def contents(self):
+        instance = self
+        qs = Comments.objects.filter_by_instance(instance)
+        return qs
 def create_slug(instance,new_slag=None):
     slug = slugify(instance.item_name)
     if new_slag is not None:
@@ -72,3 +92,14 @@ def pre_save_item_receiver(sender,instance,*args,**kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
 pre_save.connect(pre_save_item_receiver,sender=SellItemInfo)
+
+class Comments(models.Model):
+    user = models.ForeignKey(User)
+    item = models.ForeignKey(SellItemInfo)
+    username = models.CharField(max_length=20,blank=False)
+    content = models.TextField(max_length=200,blank=False)
+    timestemp = models.DateTimeField(auto_now_add=True)
+
+    # objects = CommentsManager()
+    def __unicode__(self):
+        return str(self.user.username)
