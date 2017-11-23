@@ -10,6 +10,10 @@
       <li class="active"><a href="">Item Details</a></li>
   </ul>
   <style>
+        .desk{
+
+          border-radius: 20px !important;
+        }
         .w3-tangerine {
           font-family: 'Tangerine', serif;
           font-size: 4.5em;
@@ -228,6 +232,7 @@ $(document).on('submit','#comm_form',function(e){
                         newLikes = data.ne;
 
                         updateText(this_,ne,newLikes,"Unlike");
+
                      }
                      else {
                         newLikes = data.ne;
@@ -285,6 +290,7 @@ $(document).on('submit','#comm_form',function(e){
     }
     window.onload = function() {
         var myVar = setInterval(getLikes, 1000);
+        var fff = setInterval(setColor, 10);
     };
     function updateText(btn,ne,newCount,verd){
       var nos = $('.nos');
@@ -394,17 +400,19 @@ $(document).on('submit','#comm_form',function(e){
 
        });
        var count = 1;
-      function setColor(btn, color) {
-          var property = document.getElementById(btn);
-          if (count == 1) {
+      function setColor() {
+          var property = document.getElementById('like');
+          if (property.innerText=="Unlike") {
               property.style.backgroundColor = "#E74C3C"
-                property.style.addClass = "action-button animate blue";
-              count = 0;
+
+              property.style.addClass = "action-button animate blue";
+
           }
           else {
+
               property.style.backgroundColor = "#3498DB"
               property.style.addClass = "action-button animate red";
-              count = 1;
+
           }
       }
       //  $(document).ready(function(){
@@ -424,7 +432,55 @@ $(document).on('submit','#comm_form',function(e){
 
 
 <style media="screen">
+          .cont {
+          border: 2px solid #dedede;
+          background-color: #ADD8E6;
 
+          padding: 10px;
+          margin: 10px 0;
+
+          border-radius: 20px !important;
+
+          }
+
+          .darker {
+            right: 25px;
+            text-decoration-color: #ADD8E6;
+          border-color: #ccc;
+          background-color: #ddd;
+          }
+
+          .cont::after {
+          content: "";
+          clear: both;
+          display: table;
+          }
+
+          .cont img {
+          float: left;
+          max-width: 60px;
+          width: 50%;
+          height: 50px;
+          width: 40px;
+          margin-right: 20px;
+          border-radius: 50% !important;
+          }
+
+          .cont img.right {
+          float: right;
+          margin-left: 20px;
+          margin-right:0;
+          }
+
+          .time-right {
+          float: right;
+          color: #aaa;
+          }
+
+          .time-left {
+          float: left;
+          color: #999;
+          }
           @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic);
           blockquote{
           font-size: 1em;
@@ -609,7 +665,7 @@ $(document).on('submit','#comm_form',function(e){
           </div>
         </div>
 
-        <button  id="like" onclick="setColor('like', '#E74C3C')" type="button"  class="action-button animate blue like-btn" data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' name="button">{{ liked }}</button>
+        <button  id="like" onclick="setColor()" type="button"  class="desk action-button animate blue like-btn" data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' name="button">{{ liked }}</button>
       </div>
       <!-- Carousel nav -->
       <a data-slide="prev" href="#myCarousel" class="carousel-control left">
@@ -649,10 +705,10 @@ $(document).on('submit','#comm_form',function(e){
       <div style="position:absolute;top:2px;left :2px" class="back"></div>
 
       <div id="name">
-          <label for="firstname">{{ user }}</label>
+          <label for="firstname">{{ instance.uploader }}</label>
       </div>
       <div class="img">
-            <img src="{{ user.userprofileinfo.profilepic.url }}" class="img-responsive" alt="Mountains">
+            <!-- <img src="{{ instance.uploader.userprofileinfo.profilepic.url }}" height="50%" width="50%" class="img-responsive" alt="Mountains"> -->
       </div>
       <div class="bar">
       </div>
@@ -668,11 +724,29 @@ $(document).on('submit','#comm_form',function(e){
               <ul id="msg-list">
                 {% for obj in chat %}
                     {% if obj.user == request.user %}
-                        <li class="a text-right list-group-item">{{ obj.user }} : {{ obj.message }}</li>
+                    <li class="cont">
+                        <img src="{{ obj.user.userprofileinfo.profilepic.url }}" alt="Avatar" style="width:100%;">
+                        <p>{{ obj.user }} : {{ obj.message }}</p>
+                        <span class="time-right">  {{ obj.created }}</span>
+                    </li>
+
+                        <!-- <li class="a text-right list-group-item">
+                          <img src="{{ obj.user.userprofileinfo.profilepic.url }}" height="50%" width="50%" class="img-responsive" alt="Mountains">
+                          {{ obj.user }} : {{ obj.message }}</br>
+                          {{ obj.created }}
+                        </li> -->
                     {% elif request.user.username == obj.fromm  %}
-                        <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
+                    <li class="cont darker">
+                        <img src="{{ obj.user.userprofileinfo.profilepic.url }}" alt="Avatar" class="right" style="width:100%;">
+                        <p>{{ obj.user }} : {{ obj.message }}</p>
+                        <span class="time-left">{{ obj.created }}</span>
+                    </li>
                     {% elif instance.uploader == request.user.username  %}
-                        <li class="b text-left list-group-item">{{ obj.user }} : {{ obj.message }}</li>
+                        <li class="b text-left list-group-item">
+                          <img src="{{ obj.user.userprofileinfo.profilepic.url }}" height="50%" width="50%" class="img-responsive" alt="Mountains">
+                          {{ obj.user }} : {{ obj.message }}</br>
+                          {{ obj.created }}
+                        </li>
                     {% endif %}
                 {% empty %}
                     <li class="text-right list-group-item">No messages yet!</li>
