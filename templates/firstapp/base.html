@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     {% block title_block %}
-    
+
     {% endblock %}
 
       <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -282,7 +282,11 @@
             <style media="screen">
 
 
-
+            #iii {
+                height: 20px;
+                width: 20px;
+                border-radius: 50% !important;
+            }
             .badge1[data-badge]:after {
                   content:attr(data-badge);
                   position:relative;
@@ -394,15 +398,58 @@
                               var lis = $("#myDropdown a");
                               if(lis.length < jsonData.length) {
                                 //$("#myDropdown").append("<a>"+c.to+"->"+c.description+"</a>");
+                                  var fon = document.createElement("font");
+                                  fon.setAttribute("color", "green");
+                                  fon.setAttribute("size", 5);
+                                  var textnode = document.createTextNode(c.description);
+                                  fon.appendChild(textnode);
+
+                                  var fo = document.createElement("font");
+                                  fo.setAttribute("size", 1);
+                                  var textnode1 = document.createTextNode(c.to);
+                                  fo.appendChild(textnode1);
+
+
+                                  var x = document.createElement("IMG");
+                                  x.setAttribute("id", "iii" );
+                                  x.setAttribute("src", "/media/"+c.profilepic );
+                                  x.setAttribute("width", "20%");
+                                  x.setAttribute("height", "20%");
+
                                   var link = document.createElement('a');
+
+
+
                                   // link.href = "/User/"+c.count+"details/";
-                                  link.textContent =  c.to+"->"+c.description ;
+                                  // var img = document.createAttribute("");
+                                  // link.setAttribute()
+                                  // var elem = document.createElement("img");
+                                  // elem.setAttribute("src", c.profilepic );
+                                  // elem.setAttribute("height", "20%");
+                                  // elem.setAttribute("width", "20%");
+                                  // elem.setAttribute("alt", "");
+                                  // link.append(elem);
+
+
                                   link.href = "/User/"+c.count+"details/";
+
+
+
+                                  link.appendChild(x)
+                                  link.appendChild(fon)
+                                  link.appendChild(fo)
+
                                   document.getElementById('myDropdown').appendChild(link);
+                                  // document.getElementById('myDropdown').appendChild(fon);
+                                  // document.getElementById('myDropdown').appendChild(fo);
+                                  var att = document.createAttribute("data-badge");       // Create a "class" attribute
+                                  att.value = jsonData.length-lis.length;
+                                  document.getElementById('btn-click').setAttributeNode(att);
 
                               }
                               else if(lis.length > jsonData.length){
                                   $("#myDropdown").remove("<li>"+counter.to+"->"+counter.description+"</li>");
+                                  document.getElementById('btn-click').removeAttribute("data-badge");
 
                               }
 
@@ -419,8 +466,11 @@
                               //$('#myDropdown').html('');
 
                             //  var myVar0 = setInterval(deleteNotification, 500);
-                              var myVar = setInterval(getNotifications, 1000);
+
                   }
+                  window.onload = function() {
+                      var myVar = setInterval(getNotifications, 1000);
+                  };
                   window.onclick = function(event) {
                   if (!event.target.matches('.dropbtn')) {
                       var dropdowns = document.getElementsByClassName("dropdownc-content");
@@ -436,18 +486,34 @@
             </script>
             <li class="dropdown" >
               <div class="dropdownc">
-                <button id="btn-click" class="badge1 dropbtn" data-badge="_6_">
+              {% if c == 0 %}
+                <button id="btn-click" class="badge1 dropbtn" >
                     <i  onclick="myFunctio()" class="fa fa-bell dropbtn"></i>
+                </button>
+              {% else %}
+              <button id="btn-click" class="badge1 dropbtn" data-badge="{{ c }}">
+                  <i  onclick="myFunctio()" class="fa fa-bell dropbtn"></i>
               </button>
+              {% endif %}
 
               <div id="myDropdown" class="dropdownc-content">
                   <!-- <a href="#">c</a> -->
                   <!-- <a>asasdfasdf</a> -->
 
-                {% for obj,name in counter %}
+                {% for obj in counter %}
                     {% for item in items %}
                         {% if item.slug == obj.count %}
-                          <a id="yoo" href="{{ item.get_absolute_url }}"> {{ obj.to }}->{{ obj.description }}<button class="close">&times;</button></a>
+
+                          <a id="yoo" href="{{ item.get_absolute_url }}">
+
+
+                                  <img id="iii" src="{{ obj.user.userprofileinfo.profilepic.url }}"  width="20%" height="20%" alt="">
+
+                                <font face="Open Sans" color="green" size="5">{{ obj.description }}</font>
+                                <font face="Open Sans" size="1">{{ obj.to }}</font>
+
+                            <button class="close">&times;</button>
+                          </a>
                         {% endif %}
 
                     {% endfor %}

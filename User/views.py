@@ -168,13 +168,11 @@ def combine(list1, list2):
 def userhome(request,username='main'):
     u = User.objects.get(username=request.user.username)
     counter = Notification.objects.exclude(user=request.user)
-    bonus = UserProfileInfo.objects.exclude(user=request.user)
-    hhh = list(counter.values('to','description','count','fromm'))
-    bbb = list(bonus.values('profilepic'))
-    fin = zip(hhh,bbb)
-    # print(hhh)
+
+
+
     items = SellItemInfo.objects.all()
-    args = {'items' : items,'counter' : fin }
+    args = {'items' : items,'counter' : counter ,"c" : counter.count() }
     return render(request,'firstapp/userhome.html',args)
 
 @login_required
@@ -224,6 +222,7 @@ def showitem(request,slug=None,id=None):
 
 
     c = Chat.objects.all()
+    v = Chat.objects.filter(fromm=other,user=request.user)
     # u = request.get('id')
     global nam
     namw = ""
@@ -265,7 +264,8 @@ def showitem(request,slug=None,id=None):
         'nam' : nam,
         "liked": liked,
         "obj" : obj,
-        "comments" : comments
+        "comments" : comments,
+        "v"    : v
 
 
 
